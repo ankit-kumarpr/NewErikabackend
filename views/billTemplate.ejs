@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Quotation PDF</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Times New Roman", Times, serif;
+        padding: 10px;
+      }
+      .main {
+        border: 2px solid black;
+        padding: 5px;
+        height: 98vh;
+      }
+      h1 {
+        font-size: 24px;
+        text-align: center;
+        margin-bottom: 10px;
+        color: #333;
+        margin-top: 10px;
+      }
+
+      hr {
+        margin: 20px auto;
+        width: 80%;
+      }
+
+      .header {
+        padding: 20px;
+        color: #000;
+        margin-bottom: 10px;
+      }
+
+      .intro {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: -30px;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+      }
+
+      .logo-image {
+        max-width: 100px;
+        height: auto;
+        margin-right: 10px;
+      }
+
+      .logo-text {
+        font-size: 1.2em;
+      }
+
+      .invoice-no {
+        text-align: right;
+      }
+
+      .address {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+      }
+
+      .main-address h3 {
+        margin: 5px 0;
+      }
+
+      .date h3 {
+        margin: 0;
+        color: #000;
+      }
+
+      .billShip {
+        display: flex;
+        justify-content: space-between;
+        padding: 20px;
+        border-radius: 8px;
+      }
+
+      .Ship,
+      .Bill {
+        width: 48%;
+        padding: 10px;
+        border-radius: 5px;
+      }
+
+      .Bill {
+        /* background-color: #f8d7da; */
+      }
+
+      .Ship {
+        /* background-color: #d1ecf1; */
+      }
+
+      h2 {
+        margin-bottom: 10px;
+        color: #333;
+      }
+
+      p {
+        margin: 5px 0;
+        color: #333;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+        padding: 15px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+      }
+
+      th {
+        background-color: #f2f2f2;
+        color: #333;
+      }
+
+      .table-container {
+        margin: 20px;
+        border-radius: 8px;
+      }
+
+      .totals-row td {
+        font-weight: bold;
+      }
+      .finaltotal {
+        text-align: right;
+        margin-right: 20px;
+      }
+      .footer {
+        position: absolute;
+        bottom: 10px; /* Distance from the bottom */
+        left: 0;
+        right: 0;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <h1>Your Quotation PDF</h1>
+      <hr />
+      <section class="header">
+        <div class="intro">
+          <div class="logo">
+            <img
+              src="http://localhost:5000/logos/Erika.png
+                "
+              alt="Company-logo"
+              class="logo-image"
+            />
+
+            <span class="logo-text">Erika Heena Herbal</span>
+          </div>
+        </div>
+
+        <div class="address">
+          <div class="main-address">
+            <h4>SH-58, Dhinawas Road, Sojat,<br />Rajasthan - 306104, India</h4>
+            <h4><strong>Mobile.no:</strong> 9414971555</h4>
+            <h4><strong>Email:</strong> erikahennaherbal@gmail.com</h4>
+          </div>
+          <div class="date">
+            <h3>Date: &nbsp; &nbsp;<%= new Date().toLocaleDateString() %></h3>
+            <h3>
+              <strong>Invoice No: &nbsp;&nbsp;</strong><%= bill.invoice_no %>
+            </h3>
+          </div>
+        </div>
+      </section>
+
+      <section class="billShip">
+        <div class="Bill">
+          <h3
+            style="
+              text-align: center;
+              border-bottom: 1px solid rgb(191, 187, 187);
+            "
+          >
+            Bill To
+          </h3>
+          <p><%= customer.cus_name %></p>
+          <p><%= customer.company_name%></p>
+
+          <p>
+            <%= customer.Locality %><br />
+            <%= customer.City %>, <%= customer.State %>, <%= customer.zip %>
+          </p>
+          <p><%= customer.phone %></p>
+          <p><strong>Email:</strong> <%= customer.cus_mail %></p>
+          <p><strong>GST No:</strong> <%= customer.GST %></p>
+        </div>
+        <div class="Ship">
+          <h3
+            style="
+              text-align: center;
+              border-bottom: 1px solid rgb(191, 187, 187);
+            "
+          >
+            Ship To
+          </h3>
+          <p><%= customer.scus_name %></p>
+          <p><%= customer.scompany_name %></p>
+
+          <p>
+            <%= customer.Locality %><br />
+            <%= customer.City %>, <%= customer.State %>, <%= customer.szip %>
+          </p>
+          <p><%= customer.sphone || customer.mobile %></p>
+          <p>
+            <strong>Email:</strong> <%= customer.scus_mail || customer.email %>
+          </p>
+          <p><strong>GST No:</strong> <%= customer.sGST || customer.gstNo %></p>
+        </div>
+      </section>
+
+      <!-- Added container for the table to give padding and border -->
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Sr.No</th>
+              <th>Product Name</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <% if (customer.State === 'Uttarakhand' || customer.sState === 'Uttarakhand') { %>
+                <th>CGST</th>
+                <th>SGST</th>
+              <% } else { %>
+                <th>GST</th>
+              <% } %>
+            </tr>
+          </thead>
+          <tbody>
+            <% bill.products.forEach((product, index) => { %>
+            <tr>
+              <td><%= index + 1 %></td>
+              <td><%= product.product_name %></td>
+              <td><%= product.purchase_quantity %></td>
+              <td><%= product.product_price.toFixed(2) %></td>
+              <% if (customer.State === 'Uttarakhand' || customer.sState === 'Uttarakhand') { %>
+                <td><%= product.cgst.toFixed(2) %></td>
+                <td><%= product.sgst.toFixed(2) %></td>
+              <% } else { %>
+                <td><%= product.total_gst.toFixed(2) %></td>
+              <% } %>
+            </tr>
+            <% }); %>
+      
+            <tr>
+              <td colspan="4" style="text-align: right">
+                <span class="total-label"><strong>Sub Total:</strong></span>
+                <span><%= bill.total_amount - bill.total_gst %></span>
+              </td>
+              <td colspan="2">
+                <span class="total-label"><strong>Total Tax:</strong></span>
+                <span><%= bill.total_gst.toFixed(2) %></span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+
+      <div
+        class="finalsettlement"
+        style="display: flex; justify-content: space-between; margin-top: 20px"
+      >
+        <div class="account-details" style="flex: 1">
+          <h3
+            style="
+             
+              border-bottom: 1px solid #ddd;
+              text-align: center;
+            "
+          >
+            Bank Details
+          </h3>
+          <div
+            class="finaltotal"
+            style="
+              display: flex;
+              flex-direction: column;
+              align-items: flex-start;
+             
+              margin-top: 10px;
+            "
+          >
+            <div
+              class="total-item"
+              style="
+                display: flex;
+                justify-content: space-between;
+                width: 300px;
+                margin-left: 20px;
+                padding-bottom: 8px;
+              "
+            >
+              <span class="total-label" style="font-weight: bold"
+                >Bank Name:&nbsp;&nbsp;&nbsp;</span
+              >
+              <span>Apne ap se pucho</span>
+            </div>
+            <div
+              class="total-item"
+              style="
+                display: flex;
+                justify-content: space-between;
+                width: 300px;
+                margin-left: 20px;
+                padding-bottom: 8px;
+              "
+            >
+              <span class="total-label" style="font-weight: bold"
+                >Account Holder name:&nbsp;&nbsp;&nbsp;</span
+              >
+              <span>Dai Khud</span>
+            </div>
+            <div
+              class="total-item"
+              style="
+                display: flex;
+                justify-content: space-between;
+                width: 300px;
+                margin-left: 20px;
+                padding-bottom: 8px;
+              "
+            >
+              <span class="total-label" style="font-weight: bold"
+                >Account Number:&nbsp;&nbsp;&nbsp;</span
+              >
+              <span>Jo man ho</span>
+            </div>
+            <div
+              class="total-item"
+              style="
+                display: flex;
+                justify-content: space-between;
+                width: 300px;
+                margin-left: 20px;
+                padding-bottom: 8px;
+              "
+            >
+              <span class="total-label" style="font-weight: bold"
+                >IFSC Code:&nbsp;&nbsp;&nbsp;</span
+              >
+              <span>Likh lo khud</span>
+            </div>
+            <div
+              class="total-item"
+              style="
+                display: flex;
+                justify-content: space-between;
+                width: 300px;
+                margin-left: 20px;
+                padding-bottom: 8px;
+              "
+            >
+              <span class="total-label" style="font-weight: bold"
+                >Brach Name:&nbsp;&nbsp;&nbsp;</span
+              >
+              <span>Nahi Malum</span>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="finaltotal"
+          style="
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            
+            margin-top: 40px;
+          "
+        >
+          <!-- <h3 style="text-align: right; border-bottom: 1px solid #ddd;">Total Amount</h3> -->
+          <div
+            class="total-item"
+            style="
+              display: flex;
+              justify-content: space-between;
+              width: 300px;
+              padding-bottom: 8px;
+            "
+          >
+            <span class="total-label" style="font-weight: bold"
+              >Total Price:&nbsp;&nbsp;&nbsp;</span
+            >
+            <span><%= (bill.total_amount - bill.total_gst).toFixed(2) %></span>
+          </div>
+          <div
+            class="total-item"
+            style="
+              display: flex;
+              justify-content: space-between;
+              width: 300px;
+              padding-bottom: 8px;
+            "
+          >
+            <span class="total-label" style="font-weight: bold"
+              >Total Tax:&nbsp;&nbsp;&nbsp;</span
+            >
+            <span><%= bill.total_gst.toFixed(2) %></span>
+          </div>
+          <div
+            class="total-item"
+            style="
+              display: flex;
+              justify-content: space-between;
+              width: 300px;
+              padding-bottom: 8px;
+            "
+          >
+            <span class="total-label" style="font-weight: bold"
+              >Total Amount:&nbsp;&nbsp;&nbsp;</span
+            >
+            <span><%= bill.total_amount.toFixed(2) %></span>
+          </div>
+
+
+
+
+
+         
+
+
+
+
+
+
+
+
+
+
+          <div
+          class="total-item"
+          style="
+            display: flex;
+            justify-content: space-between;
+            width: 300px;
+            padding-bottom: 8px;
+          "
+        >
+          <span class="total-label" style="font-weight: bold;margin-top: 15px;"
+            >Signature:&nbsp;&nbsp;&nbsp;</span
+          >
+          <span style="width: 150px;height: 50px;background-color: aqua;">
+            
+          </span>
+        </div>
+        </div>
+      </div>
+
+     
+    </div>
+  </body>
+</html>
